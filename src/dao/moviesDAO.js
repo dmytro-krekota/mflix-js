@@ -30,7 +30,10 @@ export default class MoviesDAO {
       connectionStatus: 1,
     })
     const authInfo = roleInfo.authInfo.authenticatedUserRoles[0]
-    const { poolSize, wtimeout } = movies.s.db.serverConfig.s.options
+    const {
+      poolSize = 50,
+      wtimeout = 2500,
+    } = movies.s.db.serverConfig.s.options
     let response = {
       poolSize,
       wtimeout,
@@ -409,6 +412,9 @@ export default class MoviesDAO {
 
       // TODO Ticket: Error Handling
       // Catch the InvalidId error by string matching, and then handle it.
+      if (e && e.toString()) {
+        return null
+      }
       console.error(`Something went wrong in getMovieByID: ${e}`)
       throw e
     }
